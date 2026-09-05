@@ -1,0 +1,14 @@
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\bin\Debug\net9.0\Proyecto Software.exe
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\bin\Debug\net9.0\Proyecto Software.deps.json
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\bin\Debug\net9.0\Proyecto Software.runtimeconfig.json
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\bin\Debug\net9.0\Proyecto Software.dll
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\bin\Debug\net9.0\Proyecto Software.pdb
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\Proyecto Software.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\Proyecto Software.AssemblyInfoInputs.cache
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\Proyecto Software.AssemblyInfo.cs
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\Proyecto Software.csproj.CoreCompileInputs.cache
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\Proyecto Software.dll
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\refint\Proyecto Software.dll
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\Proyecto Software.pdb
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\Proyecto Software.genruntimeconfig.cache
+C:\Users\lourd\OneDrive\Documentos\Tarea\Proyecto Software\obj\Debug\net9.0\ref\Proyecto Software.dll
