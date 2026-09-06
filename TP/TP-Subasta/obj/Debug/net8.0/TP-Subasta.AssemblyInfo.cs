@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TP-Subasta")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fcb5e5f42259cdd38f66867907b63eeef5b45700")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+27e960a7d30d4b1e30ce90219941bc534cf7574a")]
 [assembly: System.Reflection.AssemblyProductAttribute("TP-Subasta")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TP-Subasta")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

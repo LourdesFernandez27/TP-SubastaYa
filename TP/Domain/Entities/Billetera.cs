@@ -14,6 +14,8 @@ namespace Domain.Entities
         public decimal SaldoRetenido { get; set; }
         public decimal SaldoDisponible
         {
-            get {return SaldoTotal - SaldoRetenido; }
+            get { return SaldoTotal - SaldoRetenido; }
         }
+    }
+
 }

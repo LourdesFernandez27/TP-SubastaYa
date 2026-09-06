@@ -8,23 +8,23 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\lourd\\.nuget\\packages\\": {},
+    "C:\\Users\\sgnec\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lourd\\OneDrive\\Documentos\\Tarea\\Proyecto Software\\TP\\Domain\\Domain.csproj",
+      "projectUniqueName": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "C:\\Users\\lourd\\OneDrive\\Documentos\\Tarea\\Proyecto Software\\TP\\Domain\\Domain.csproj",
-      "packagesPath": "C:\\Users\\lourd\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lourd\\OneDrive\\Documentos\\Tarea\\Proyecto Software\\TP\\Domain\\obj\\",
+      "projectPath": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Domain.csproj",
+      "packagesPath": "C:\\Users\\sgnec\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\lourd\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\sgnec\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -33,7 +33,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://www.nuget.org/api/v2/": {}
       },
       "frameworks": {
         "net8.0": {
@@ -72,7 +72,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.317/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
