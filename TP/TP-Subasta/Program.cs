@@ -10,10 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//custom
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Custom
+/* LO AGREGÓ LA IA
+ * var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? "Server=(localdb)\\mssqllocaldb;Database=SubastaDb;Trusted_Connection=True;TrustServerCertificate=True;";
 builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
-
+*/
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
