@@ -4,6 +4,7 @@ using Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260912014537_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,11 +25,7 @@ namespace Infraestructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Domain.Entities.AuditLog", b =>
-=======
             modelBuilder.Entity("Domain.Entities.Auditoria_Log", b =>
->>>>>>> origin/Endpoints
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,13 +37,6 @@ namespace Infraestructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.Property<string>("Detalle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-=======
->>>>>>> origin/Endpoints
                     b.Property<string>("Entidad")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -55,14 +47,6 @@ namespace Infraestructure.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AuditLogs");
-=======
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
@@ -75,7 +59,6 @@ namespace Infraestructure.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Auditoria_Log", (string)null);
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Billetera", b =>
@@ -86,41 +69,24 @@ namespace Infraestructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
-                    b.Property<decimal>("SaldoDisponible")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("SaldoRetenido")
-=======
                     b.Property<decimal>("SaldoRetenido")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("SaldoTotal")
->>>>>>> origin/Endpoints
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.Property<long>("Version")
-                        .IsConcurrencyToken()
-                        .HasColumnType("bigint");
-=======
                     b.Property<int>("Version")
                         .HasColumnType("int");
->>>>>>> origin/Endpoints
 
                     b.HasKey("Id");
 
                     b.HasIndex("UsuarioId")
                         .IsUnique();
 
-<<<<<<< HEAD
-                    b.ToTable("Billeteras", (string)null);
-=======
                     b.ToTable("Billetera", (string)null);
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Categoria", b =>
@@ -135,11 +101,6 @@ namespace Infraestructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-
-                    b.ToTable("Categorias");
-=======
                     b.Property<string>("Url_icono")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -147,7 +108,6 @@ namespace Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categoria", (string)null);
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Puja", b =>
@@ -158,12 +118,9 @@ namespace Infraestructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
-=======
                     b.Property<int>("CompradorId")
                         .HasColumnType("int");
 
->>>>>>> origin/Endpoints
                     b.Property<DateTime>("FechaPuja")
                         .HasColumnType("datetime2");
 
@@ -173,18 +130,6 @@ namespace Infraestructure.Migrations
                     b.Property<int>("SubastaId")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubastaId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Pujas", (string)null);
-=======
                     b.HasKey("Id");
 
                     b.HasIndex("CompradorId");
@@ -192,7 +137,6 @@ namespace Infraestructure.Migrations
                     b.HasIndex("SubastaId");
 
                     b.ToTable("Puja", (string)null);
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Subasta", b =>
@@ -203,15 +147,6 @@ namespace Infraestructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("int");
-=======
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
@@ -222,7 +157,6 @@ namespace Infraestructure.Migrations
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
->>>>>>> origin/Endpoints
 
                     b.Property<DateTime>("FechaFin")
                         .HasColumnType("datetime2");
@@ -244,32 +178,15 @@ namespace Infraestructure.Migrations
 
                     b.Property<string>("Titulo")
                         .IsRequired()
-<<<<<<< HEAD
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("UriImagen")
-=======
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url_imagen")
->>>>>>> origin/Endpoints
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VendedorId")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-
-                    b.HasIndex("VendedorId");
-
-                    b.ToTable("Subastas", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.TransaccionLedger", b =>
-=======
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
@@ -283,7 +200,6 @@ namespace Infraestructure.Migrations
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaccion_Ledger", b =>
->>>>>>> origin/Endpoints
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -300,32 +216,20 @@ namespace Infraestructure.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18,2)");
 
-<<<<<<< HEAD
-                    b.Property<int?>("SubastaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TipoMovimiento")
-                        .HasColumnType("int");
-=======
                     b.Property<int>("SubastaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
->>>>>>> origin/Endpoints
 
                     b.HasKey("Id");
 
                     b.HasIndex("BilleteraId");
 
-<<<<<<< HEAD
-                    b.ToTable("LedgerEntries");
-=======
                     b.HasIndex("SubastaId");
 
                     b.ToTable("Transaccion_Ledger", (string)null);
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Usuario", b =>
@@ -338,19 +242,6 @@ namespace Infraestructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-<<<<<<< HEAD
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Usuarios", (string)null);
-=======
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaRegistro")
@@ -374,53 +265,33 @@ namespace Infraestructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Billetera", b =>
                 {
-<<<<<<< HEAD
-                    b.HasOne("Domain.Entities.Usuario", null)
-=======
                     b.HasOne("Domain.Entities.Usuario", "Usuario")
->>>>>>> origin/Endpoints
                         .WithOne("Billetera")
                         .HasForeignKey("Domain.Entities.Billetera", "UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-<<<<<<< HEAD
-=======
 
                     b.Navigation("Usuario");
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Puja", b =>
                 {
-<<<<<<< HEAD
-=======
                     b.HasOne("Domain.Entities.Usuario", "Usuario")
                         .WithMany("Pujas")
                         .HasForeignKey("CompradorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
->>>>>>> origin/Endpoints
                     b.HasOne("Domain.Entities.Subasta", "Subasta")
                         .WithMany("Pujas")
                         .HasForeignKey("SubastaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<< HEAD
-                    b.HasOne("Domain.Entities.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-=======
->>>>>>> origin/Endpoints
                     b.Navigation("Subasta");
 
                     b.Navigation("Usuario");
@@ -428,10 +299,6 @@ namespace Infraestructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Subasta", b =>
                 {
-<<<<<<< HEAD
-                    b.HasOne("Domain.Entities.Usuario", "Vendedor")
-                        .WithMany()
-=======
                     b.HasOne("Domain.Entities.Categoria", "Categoria")
                         .WithMany("Subastas")
                         .HasForeignKey("CategoriaId")
@@ -440,24 +307,16 @@ namespace Infraestructure.Migrations
 
                     b.HasOne("Domain.Entities.Usuario", "Usuario")
                         .WithMany("Subastas")
->>>>>>> origin/Endpoints
                         .HasForeignKey("VendedorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-<<<<<<< HEAD
-                    b.Navigation("Vendedor");
-                });
-
-            modelBuilder.Entity("Domain.Entities.TransaccionLedger", b =>
-=======
                     b.Navigation("Categoria");
 
                     b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaccion_Ledger", b =>
->>>>>>> origin/Endpoints
                 {
                     b.HasOne("Domain.Entities.Billetera", "Billetera")
                         .WithMany()
@@ -465,9 +324,6 @@ namespace Infraestructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<< HEAD
-                    b.Navigation("Billetera");
-=======
                     b.HasOne("Domain.Entities.Subasta", "Subasta")
                         .WithMany("Transacciones")
                         .HasForeignKey("SubastaId")
@@ -482,25 +338,17 @@ namespace Infraestructure.Migrations
             modelBuilder.Entity("Domain.Entities.Categoria", b =>
                 {
                     b.Navigation("Subastas");
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Subasta", b =>
                 {
                     b.Navigation("Pujas");
-<<<<<<< HEAD
-=======
 
                     b.Navigation("Transacciones");
->>>>>>> origin/Endpoints
                 });
 
             modelBuilder.Entity("Domain.Entities.Usuario", b =>
                 {
-<<<<<<< HEAD
-                    b.Navigation("Billetera")
-                        .IsRequired();
-=======
                     b.Navigation("Auditoria");
 
                     b.Navigation("Billetera")
@@ -509,7 +357,6 @@ namespace Infraestructure.Migrations
                     b.Navigation("Pujas");
 
                     b.Navigation("Subastas");
->>>>>>> origin/Endpoints
                 });
 #pragma warning restore 612, 618
         }

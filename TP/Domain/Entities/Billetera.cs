@@ -10,6 +10,7 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public int UsuarioId { get; set; }
+<<<<<<< HEAD
         public decimal SaldoDisponible { get; set; }
         public decimal SaldoRetenido { get; set; }
         public decimal SaldoTotal
@@ -71,3 +72,15 @@ namespace Domain.Entities
 
 }
 
+=======
+        public decimal SaldoTotal { get; set; }
+        public decimal SaldoRetenido { get; set; }
+        public decimal SaldoDisponible
+        {
+            get { return SaldoTotal - SaldoRetenido; }
+        }
+        public int Version { get; set; }
+        public Usuario Usuario { get; set; }
+    }
+}
+>>>>>>> origin/Endpoints
