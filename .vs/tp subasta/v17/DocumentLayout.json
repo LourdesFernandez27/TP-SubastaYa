@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\sgnec\\Downloads\\tp subasta\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sgnec\\Downloads\\tp subasta\\TpSubasta.Api\\TpSubasta.Api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TpSubasta.Api\\TpSubasta.Api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sgnec\\Downloads\\tp subasta\\Proyecto Software.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Proyecto Software.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Entities\\Subasta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TP\\Domain\\Entities\\Subasta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Entities\\Puja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TP\\Domain\\Entities\\Puja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TP\\Domain\\Domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TpSubasta.Api.csproj",
+              "DocumentMoniker": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TpSubasta.Api\\TpSubasta.Api.csproj",
+              "RelativeDocumentMoniker": "TpSubasta.Api\\TpSubasta.Api.csproj",
+              "ToolTip": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TpSubasta.Api\\TpSubasta.Api.csproj",
+              "RelativeToolTip": "TpSubasta.Api\\TpSubasta.Api.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-06T21:22:22.078Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Proyecto Software.csproj",
+              "DocumentMoniker": "C:\\Users\\sgnec\\Downloads\\tp subasta\\Proyecto Software.csproj",
+              "RelativeDocumentMoniker": "Proyecto Software.csproj",
+              "ToolTip": "C:\\Users\\sgnec\\Downloads\\tp subasta\\Proyecto Software.csproj",
+              "RelativeToolTip": "Proyecto Software.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-06T21:00:02.598Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Subasta.cs",
+              "DocumentMoniker": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Entities\\Subasta.cs",
+              "RelativeDocumentMoniker": "TP\\Domain\\Entities\\Subasta.cs",
+              "ToolTip": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Entities\\Subasta.cs",
+              "RelativeToolTip": "TP\\Domain\\Entities\\Subasta.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-06T00:47:31.923Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Puja.cs",
+              "DocumentMoniker": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Entities\\Puja.cs",
+              "RelativeDocumentMoniker": "TP\\Domain\\Entities\\Puja.cs",
+              "ToolTip": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Entities\\Puja.cs",
+              "RelativeToolTip": "TP\\Domain\\Entities\\Puja.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-06T00:28:39.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Domain.csproj",
+              "DocumentMoniker": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Domain.csproj",
+              "RelativeDocumentMoniker": "TP\\Domain\\Domain.csproj",
+              "ToolTip": "C:\\Users\\sgnec\\Downloads\\tp subasta\\TP\\Domain\\Domain.csproj",
+              "RelativeToolTip": "TP\\Domain\\Domain.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-06T00:28:30.608Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Arquitectura utilizada : Hexagonal, en capas

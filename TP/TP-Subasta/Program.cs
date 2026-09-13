@@ -1,19 +1,17 @@
 using Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Infraestructure.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHostedService<SubastaWorker>();
 
-// Custom
-/* LO AGREGÓ LA IA
- * var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? "Server=(localdb)\\mssqllocaldb;Database=SubastaDb;Trusted_Connection=True;TrustServerCertificate=True;";
+//custom
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
 */
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));

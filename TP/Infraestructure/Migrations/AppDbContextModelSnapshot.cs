@@ -34,6 +34,10 @@ namespace Infraestructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Detalle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Entidad")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -83,7 +87,7 @@ namespace Infraestructure.Migrations
                     b.HasIndex("UsuarioId")
                         .IsUnique();
 
-                    b.ToTable("Billetera", (string)null);
+                    b.ToTable("Billeteras", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Categoria", b =>
@@ -127,13 +131,18 @@ namespace Infraestructure.Migrations
                     b.Property<int>("SubastaId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompradorId");
 
                     b.HasIndex("SubastaId");
 
-                    b.ToTable("Puja", (string)null);
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Pujas", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Subasta", b =>
@@ -175,9 +184,10 @@ namespace Infraestructure.Migrations
 
                     b.Property<string>("Titulo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Url_imagen")
+                    b.Property<string>("UriImagen")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -193,7 +203,7 @@ namespace Infraestructure.Migrations
 
                     b.HasIndex("VendedorId");
 
-                    b.ToTable("Subasta", (string)null);
+                    b.ToTable("Subastas", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaccion_Ledger", b =>
@@ -216,9 +226,8 @@ namespace Infraestructure.Migrations
                     b.Property<int>("SubastaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TipoMovimiento")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -287,6 +296,12 @@ namespace Infraestructure.Migrations
                         .WithMany("Pujas")
                         .HasForeignKey("SubastaId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Subasta");
