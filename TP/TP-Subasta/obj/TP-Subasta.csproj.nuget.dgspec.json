@@ -201,6 +201,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.19, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[10.0.12, )"
             }
           },
           "imports": [
