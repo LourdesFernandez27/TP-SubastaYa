@@ -11,7 +11,7 @@ namespace Application.Interfaces
     {
         Task<Billetera?> ObtenerPorUsuarioIdAsync(int usuarioId);
         Task ActualizarAsync(Billetera billetera);
-        Task RegistrarLedgerAsync(TransaccionLedger ledger);
-        Task RegistrarAuditLogAsync(AuditLog log);
+        Task RegistrarLedgerAsync(Transaccion_Ledger ledger);
+        Task RegistrarAuditLogAsync(Auditoria_Log log);
     }
 }

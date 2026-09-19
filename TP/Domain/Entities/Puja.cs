@@ -11,11 +11,9 @@ namespace Domain.Entities
         public int Id { get; set; }
         public int SubastaId { get; set; }
         public Subasta Subasta { get; set; } = null!;
-        public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; } = null!;
+        public int CompradorId { get; set; }
+        public Usuario Comprador { get; set; } = null!;
         public decimal Monto { get; set; }
         public DateTime FechaPuja { get; set; }
-        public Subasta Subasta { get; set; }
-        public Usuario Usuario { get; set; }
     }
 }

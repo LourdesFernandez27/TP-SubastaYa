@@ -10,7 +10,7 @@ namespace Application.DTOs
     {
         public string Titulo { get; set; }
         public string Descripcion { get; set; }
-        public string Url_imagen { get; set; }
+        public string UrlImagen { get; set; }
         public decimal PrecioBase { get; set; }
         public decimal IncrementoMinimo { get; set; }
         public DateTime FechaInicio { get; set; }

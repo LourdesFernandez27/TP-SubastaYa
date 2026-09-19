@@ -1,8 +1,8 @@
 ﻿using Application.DTOs;
-using Application.Exceptions;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,9 +76,9 @@ namespace Application.UseCases
                 Puja? pujaLiderAnterior = null;
                 decimal maxValorPujado = 0;
 
-                for (int idx_tk = 0; idx_tk < subasta.Pujas.Count; idx_tk++)
+                for (int i = 0; i < subasta.Pujas.Count; i++)
                 {
-                    var pujaTemporal = subasta.Pujas[idx_tk];
+                    var pujaTemporal = subasta.Pujas[i];
                     if (pujaTemporal.Monto > maxValorPujado)
                     {
                         maxValorPujado = pujaTemporal.Monto;
@@ -98,7 +98,7 @@ namespace Application.UseCases
                 await _billeteraRepository.ActualizarAsync(billeteraNuevoPujador);
 
                 // Registrar movimiento en el libro mayor contable (Ledger)
-                var ledgerNuevo = new TransaccionLedger
+                var ledgerNuevo = new Transaccion_Ledger
                 {
                     BilleteraId = billeteraNuevoPujador.Id,
                     TipoMovimiento = TipoMovimiento.RETENCION,
@@ -111,7 +111,7 @@ namespace Application.UseCases
                 // 6. Si hay un postor líder previo, liberar inmediatamente su saldo de garantía retenido
                 if (pujaLiderAnterior != null)
                 {
-                    var billeteraLiderAnterior = await _billeteraRepository.ObtenerPorUsuarioIdAsync(pujaLiderAnterior.UsuarioId);
+                    var billeteraLiderAnterior = await _billeteraRepository.ObtenerPorUsuarioIdAsync(pujaLiderAnterior.CompradorId);
                     if (billeteraLiderAnterior == null)
                     {
                         throw new NegocioException("La billetera del postor líder previo no pudo ser localizada.");
@@ -122,7 +122,7 @@ namespace Application.UseCases
                     await _billeteraRepository.ActualizarAsync(billeteraLiderAnterior);
 
                     // Registrar liberación en Ledger
-                    var ledgerAnterior = new TransaccionLedger
+                    var ledgerAnterior = new Transaccion_Ledger
                     {
                         BilleteraId = billeteraLiderAnterior.Id,
                         TipoMovimiento = TipoMovimiento.LIBERACION,
@@ -137,7 +137,7 @@ namespace Application.UseCases
                 var nuevaPuja = new Puja
                 {
                     SubastaId = subasta.Id,
-                    UsuarioId = request.UsuarioId,
+                    CompradorId = request.UsuarioId,
                     Monto = request.Monto,
                     FechaPuja = DateTime.UtcNow
                 };
@@ -151,12 +151,12 @@ namespace Application.UseCases
                     subasta.FechaFin = subasta.FechaFin.AddMinutes(2);
 
                     // Registrar evento de negocio de auditoría inmutable
-                    var logAntiSniping = new AuditLog
+                    var logAntiSniping = new Auditoria_Log
                     {
                         Entidad = "Subasta",
                         EntidadId = subasta.Id,
                         Accion = "EXTENSION_TIEMPO",
-                        Detalle = $"Mecanismo anti-sniping gatillado por puja del usuario {request.UsuarioId}. Fecha de finalización extendida de {fechaAnterior:yyyy-MM-dd HH:mm:ss} a {subasta.FechaFin:yyyy-MM-dd HH:mm:ss}.",
+                        detalle_json = $"Mecanismo anti-sniping gatillado por puja del usuario {request.UsuarioId}. Fecha de finalización extendida de {fechaAnterior:yyyy-MM-dd HH:mm:ss} a {subasta.FechaFin:yyyy-MM-dd HH:mm:ss}.",
                         Fecha = DateTime.UtcNow,
                         UsuarioId = request.UsuarioId
                     };
@@ -179,12 +179,12 @@ namespace Application.UseCases
                 if (ex.Message.Contains("concurrency",StringComparison.OrdinalIgnoreCase) || ex.InnerException != null) 
                 {
                     // Dejamos un registro del fallo de concurrencia para auditoría
-                    var logRechazo = new AuditLog
+                    var logRechazo = new Auditoria_Log
                     {
                         Entidad = "Subasta",
                         EntidadId = request.SubastaId,
                         Accion = "RECHAZO_CONCURRENCIA",
-                        Detalle = $"Puja del usuario {request.UsuarioId} rechazada debido a conflicto de concurrencia optimista al intentar confirmar.",
+                        detalle_json = $"Puja del usuario {request.UsuarioId} rechazada debido a conflicto de concurrencia optimista al intentar confirmar.",
                         Fecha = DateTime.UtcNow,
                         UsuarioId = request.UsuarioId
                     };

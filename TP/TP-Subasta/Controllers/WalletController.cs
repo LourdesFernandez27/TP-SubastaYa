@@ -1,5 +1,5 @@
-using Azure.Core;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,6 @@ using Application.DTOs;
 using System;
 using System.Threading.Tasks;
 using Infraestructure.Persistence;
-using Domain.Exceptions;
 
 namespace TP_Subasta.Controllers
 {
@@ -61,14 +60,14 @@ namespace TP_Subasta.Controllers
                     return NotFound(new { mensaje = $"No se encontró billetera para el usuario {request.UsuarioId}" });
                 }
 
-                billetera.SaldoTotal += request.Monto; 
+                billetera.SaldoDisponible += request.Monto; 
                 billetera.Version++;
                 _context.Billeteras.Update(billetera);
 
                 var ledger = new Transaccion_Ledger
                 {
                     BilleteraId = billetera.Id,
-                    Tipo = "DEPOSITO",
+                    TipoMovimiento= TipoMovimiento.DEPOSITO,
                     Monto = request.Monto,
                     Fecha = System.DateTime.UtcNow
                 };
@@ -91,10 +90,6 @@ namespace TP_Subasta.Controllers
                     saldoDisponible = billetera.SaldoDisponible,
                     saldoTotal = billetera.SaldoTotal 
                 });
-            }
-            catch (ConcurrenciaException ex)
-            {
-                return StatusCode(409, new { mensaje = ex.Message });
             }
             catch(System.Exception ex)
             {

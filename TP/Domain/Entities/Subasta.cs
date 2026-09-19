@@ -12,29 +12,20 @@ namespace Domain.Entities
     public class Subasta
     {
         public int Id { get; set; }
-       // public int UsuarioId { get; set; }
-       // public int CategoriaId { get; set; }
+        public int CategoriaId { get; set; }
         public string Titulo { get; set; } = string.Empty;
         public string Descripcion { get; set; } = string.Empty;
-        public string UriImagen { get; set; } = string.Empty;
+        public string UrlImagen { get; set; } = string.Empty;
         public decimal PrecioBase { get; set; }
         public decimal IncrementoMinimo { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
-        public string Estado { get; set; }
         public int Version { get; set; }
-        [Timestamp] public byte [] RowVersion { get; set; }
         public Categoria Categoria { get; set; }
-        public Usuario Usuario { get; set; }
-        public ICollection<Puja> Pujas { get; set; }
-        public ICollection<Transaccion_Ledger> Transacciones { get; set; }
+        public List<Transaccion_Ledger> Transacciones { get; set; }
         public EstadoSubasta Estado { get; set; } = EstadoSubasta.PROGRAMADA;
         public int VendedorId { get; set; }
         public Usuario Vendedor { get; set; } = null!;
-
-        [Timestamp]
-        public byte[] RowVersion { get; set; } = null!;
-
         public List<Puja> Pujas { get; set; } = new();
 
         public decimal ObtenerOfertaMasAlta()

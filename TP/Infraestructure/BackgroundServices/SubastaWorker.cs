@@ -90,7 +90,7 @@ namespace Infraestructure.BackgroundServices
                         {
                             // 2. Resolver billeteras de comprador y vendedor
                             var billeteraComprador = await context.Billeteras
-                                .FirstOrDefaultAsync(b => b.UsuarioId == pujaGanadora.UsuarioId);
+                                .FirstOrDefaultAsync(b => b.UsuarioId == pujaGanadora.CompradorId);
 
                             var billeteraVendedor = await context.Billeteras
                                 .FirstOrDefaultAsync(b => b.UsuarioId == subasta.VendedorId);
@@ -105,7 +105,7 @@ namespace Infraestructure.BackgroundServices
                             context.Billeteras.Update(billeteraComprador);
 
                             // Registrar movimiento del comprador (Débito/Pago)
-                            var ledgerComprador = new TransaccionLedger
+                            var ledgerComprador = new Transaccion_Ledger
                             {
                                 BilleteraId = billeteraComprador.Id,
                                 TipoMovimiento = TipoMovimiento.PAGO,
@@ -113,14 +113,14 @@ namespace Infraestructure.BackgroundServices
                                 Fecha = DateTime.UtcNow,
                                 SubastaId = subasta.Id
                             };
-                            await context.LedgerEntries.AddAsync(ledgerComprador);
+                            await context.Transacciones.AddAsync(ledgerComprador);
 
                             // 4. Depositar saldo final al vendedor
                             billeteraVendedor.Depositar(pujaGanadora.Monto);
                             context.Billeteras.Update(billeteraVendedor);
 
                             // Registrar movimiento del vendedor (Crédito/Cobro)
-                            var ledgerVendedor = new TransaccionLedger
+                            var ledgerVendedor = new Transaccion_Ledger
                             {
                                 BilleteraId = billeteraVendedor.Id,
                                 TipoMovimiento = TipoMovimiento.COBRO,
@@ -128,22 +128,22 @@ namespace Infraestructure.BackgroundServices
                                 Fecha = DateTime.UtcNow,
                                 SubastaId = subasta.Id
                             };
-                            await context.LedgerEntries.AddAsync(ledgerVendedor);
+                            await context.Transacciones.AddAsync(ledgerVendedor);
 
                             // 5. Cambiar estado de la subasta a FINALIZADA
                             subasta.Estado = EstadoSubasta.FINALIZADA;
                             context.Subastas.Update(subasta);
 
                             // 6. Auditoría inmutable de adjudicación exitosa
-                            var logAdjudicacion = new AuditLog
+                            var logAdjudicacion = new Auditoria_Log
                             {
                                 Entidad = "Subasta",
                                 EntidadId = subasta.Id,
                                 Accion = "CAMBIO_ESTADO",
-                                Detalle = $"Subasta finalizada exitosamente. Adjudicada al usuario {pujaGanadora.UsuarioId} por un monto de {pujaGanadora.Monto}.",
+                                detalle_json = $"Subasta finalizada exitosamente. Adjudicada al usuario {pujaGanadora.CompradorId} por un monto de {pujaGanadora.Monto}.",
                                 Fecha = DateTime.UtcNow
                             };
-                            await context.AuditLogs.AddAsync(logAdjudicacion);
+                            await context.Auditorias.AddAsync(logAdjudicacion);
                         }
                     }
                     else
@@ -153,15 +153,15 @@ namespace Infraestructure.BackgroundServices
                         context.Subastas.Update(subasta);
 
                         // Auditoría de estado desierto
-                        var logDesierta = new AuditLog
+                        var logDesierta = new Auditoria_Log
                         {
                             Entidad = "Subasta",
                             EntidadId = subasta.Id,
                             Accion = "CAMBIO_ESTADO",
-                            Detalle = "Subasta finalizada sin ofertas recibidas. Declarada en estado DESIERTA.",
+                            detalle_json = "Subasta finalizada sin ofertas recibidas. Declarada en estado DESIERTA.",
                             Fecha = DateTime.UtcNow
                         };
-                        await context.AuditLogs.AddAsync(logDesierta);
+                        await context.Auditorias.AddAsync(logDesierta);
                     }
 
                     await context.SaveChangesAsync();

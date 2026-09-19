@@ -30,15 +30,15 @@ namespace Infraestructure.Persistence.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task RegistrarLedgerAsync(TransaccionLedger ledger)
+        public async Task RegistrarLedgerAsync(Transaccion_Ledger ledger)
         {
-            await _context.LedgerEntries.AddAsync(ledger);
+            await _context.Transacciones.AddAsync(ledger);
             await _context.SaveChangesAsync();
         }
 
-        public async Task RegistrarAuditLogAsync(AuditLog log)
+        public async Task RegistrarAuditLogAsync(Auditoria_Log log)
         {
-            await _context.AuditLogs.AddAsync(log);
+            await _context.Auditorias.AddAsync(log);
             await _context.SaveChangesAsync();
         }
 

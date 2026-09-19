@@ -1,4 +1,5 @@
 using Application.DTOs;
+using Application.UseCases;
 using Domain.Entities;
 using Domain.Exceptions;
 using Infraestructure.Persistence;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace TP_Subasta.Controllers
 {
@@ -92,7 +94,7 @@ namespace TP_Subasta.Controllers
             {
                 Titulo = request.Titulo,
                 Descripcion = request.Descripcion,
-                Url_imagen = request.Url_imagen,
+                UrlImagen = request.UrlImagen,
                 PrecioBase = request.PrecioBase,
                 IncrementoMinimo = request.IncrementoMinimo,
                 FechaFin = request.FechaFin,
@@ -107,11 +109,11 @@ namespace TP_Subasta.Controllers
         }
 
         [HttpPost("{id:int}/bids")]
-        public async Task<IActionResult> Pujar(int id, [FromBody] PujaRequest request)
+        public async Task<IActionResult> Pujar(int id, [FromBody] PujarRequest request)
         {
             try
             {
-                await _pujarUseCase.EjecutarAsync(id, request.UsuarioId, request.Monto);
+                await _pujarUseCase.EjecutarAsync(new PujarRequest(id, request.UsuarioId, request.Monto));
                 return Ok(new { mensaje = "Puja registrada" });
             }
             catch (NegocioException ex)

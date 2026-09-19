@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class DepositoRequest(int UsuarioId, decimal Monto) { }
+    public record DepositoRequest(int UsuarioId, decimal Monto) { }
 }

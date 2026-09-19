@@ -10,14 +10,14 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public int UsuarioId { get; set; }
-        public decimal SaldoTotal { get; set; }
+        public decimal SaldoDisponible { get; set; }
         public decimal SaldoRetenido { get; set; }
-        public decimal SaldoDisponible
+        public decimal SaldoTotal
         {
-            get { return SaldoTotal - SaldoRetenido; }
+            get { return SaldoDisponible + SaldoRetenido; }
         }
         public uint Version { get; set; }
-
+        public Usuario Usuario { get; set; } = null!;
         public void Depositar(decimal monto)
         {
             if (monto <= 0)
