@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:7009/api";
+const API_BASE_URL = "https://localhost:7009/api";
 
 export const apiService = {
   // GET /api/auctions/{id}
