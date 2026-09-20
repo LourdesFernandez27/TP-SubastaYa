@@ -40,20 +40,17 @@ namespace Infraestructure.BackgroundServices
                     _logger.LogError(ex,"Error al ejecutar la liquidación en el Background Worker.");
                 }
 
-                // Esperar 10 segundos antes del siguiente ciclo
                 await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
 
         private async Task ProcesarSubastasExpiradasAsync()
         {
-            // Al ser un Singleton, creamos un Scope para resolver el DbContext (Scoped)
             using var scope = _scopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             var ahora = DateTime.UtcNow;
 
-            // Buscamos subastas activas cuyo límite de tiempo haya pasado
             var subastasVencidas = await context.Subastas
                 .Include(s => s.Pujas)
                 .Where(s => s.Estado == EstadoSubasta.ACTIVA && s.FechaFin <= ahora)
@@ -64,15 +61,12 @@ namespace Infraestructure.BackgroundServices
             for (int i = 0; i < subastasVencidas.Count; i++)
             {
                 var subasta = subastasVencidas[i];
-
-                // Iniciamos transacción individual por cada subasta para aislar fallas
                 using var transaccion = await context.Database.BeginTransactionAsync();
 
                 try
                 {
                     if (subasta.Pujas != null && subasta.Pujas.Count > 0)
                     {
-                        // 1. Encontrar la oferta líder utilizando bucle tradicional
                         Puja? pujaGanadora = null;
                         decimal montoMaximo = 0;
 
@@ -88,7 +82,6 @@ namespace Infraestructure.BackgroundServices
 
                         if (pujaGanadora != null)
                         {
-                            // 2. Resolver billeteras de comprador y vendedor
                             var billeteraComprador = await context.Billeteras
                                 .FirstOrDefaultAsync(b => b.UsuarioId == pujaGanadora.CompradorId);
 
@@ -100,11 +93,9 @@ namespace Infraestructure.BackgroundServices
                                 throw new Exception("No se pudieron localizar las billeteras de los participantes de la transacción.");
                             }
 
-                            // 3. Confirmar débito al comprador (elimina del saldo retenido definitivamente)
                             billeteraComprador.ConfirmarDebito(pujaGanadora.Monto);
                             context.Billeteras.Update(billeteraComprador);
 
-                            // Registrar movimiento del comprador (Débito/Pago)
                             var ledgerComprador = new Transaccion_Ledger
                             {
                                 BilleteraId = billeteraComprador.Id,
@@ -115,11 +106,9 @@ namespace Infraestructure.BackgroundServices
                             };
                             await context.Transacciones.AddAsync(ledgerComprador);
 
-                            // 4. Depositar saldo final al vendedor
                             billeteraVendedor.Depositar(pujaGanadora.Monto);
                             context.Billeteras.Update(billeteraVendedor);
 
-                            // Registrar movimiento del vendedor (Crédito/Cobro)
                             var ledgerVendedor = new Transaccion_Ledger
                             {
                                 BilleteraId = billeteraVendedor.Id,
@@ -130,11 +119,9 @@ namespace Infraestructure.BackgroundServices
                             };
                             await context.Transacciones.AddAsync(ledgerVendedor);
 
-                            // 5. Cambiar estado de la subasta a FINALIZADA
                             subasta.Estado = EstadoSubasta.FINALIZADA;
                             context.Subastas.Update(subasta);
 
-                            // 6. Auditoría inmutable de adjudicación exitosa
                             var logAdjudicacion = new Auditoria_Log
                             {
                                 Entidad = "Subasta",
@@ -148,11 +135,9 @@ namespace Infraestructure.BackgroundServices
                     }
                     else
                     {
-                        // No tuvo ofertas, pasa a ser DESIERTA
                         subasta.Estado = EstadoSubasta.DESIERTA;
                         context.Subastas.Update(subasta);
 
-                        // Auditoría de estado desierto
                         var logDesierta = new Auditoria_Log
                         {
                             Entidad = "Subasta",

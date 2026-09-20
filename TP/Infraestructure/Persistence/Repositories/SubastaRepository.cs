@@ -22,7 +22,6 @@ namespace Infraestructure.Persistence.Repositories
         public async Task<Subasta?>ObtenerPorIdAsync(int id)
        
         {
-            // Cargamos la subasta con sus pujas asociadas de forma eagerly
             return await _context.Subastas
                 .Include(s => s.Pujas)
                 .FirstOrDefaultAsync(s => s.Id == id);
