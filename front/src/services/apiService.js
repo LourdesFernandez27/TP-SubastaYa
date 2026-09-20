@@ -29,7 +29,7 @@ export const apiService = {
       const data = await response.json();
 
       if (!response.ok) {
-        // Retornamos el objeto de error para que la UI distinga el código HTTP (ej. 409 o 400)
+
         return { success: false, status: response.status, mensaje: data.mensaje };
       }
 

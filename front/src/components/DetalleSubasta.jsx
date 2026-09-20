@@ -24,10 +24,8 @@ export const DetalleSubasta = ({ subastaId, usuarioActualId }) => {
       }
     };
 
-    // Primera ejecución inmediata
     cargarDatosSubasta();
 
-    // Short-polling cada 2000 ms (2 segundos)
     const intervalo = setInterval(() => {
       cargarDatosSubasta();
     }, 2000);
@@ -57,11 +55,10 @@ export const DetalleSubasta = ({ subastaId, usuarioActualId }) => {
     if (resultado.success) {
       setMensajeEstado({ tipo: "exito", texto: "¡Puja realizada con éxito! Eres el postor líder." });
       setMontoOferta("");
-      // Refrescar inmediatamente el estado local
+
       const datosActualizados = await apiService.obtenerSubastaPorId(subastaId);
       setSubasta(datosActualizados);
     } else {
-      // Manejo específico de la respuesta 409 Conflict por concurrencia optimista
       if (resultado.status === 409) {
         setMensajeEstado({
           tipo: "conflicto",
@@ -92,7 +89,6 @@ export const DetalleSubasta = ({ subastaId, usuarioActualId }) => {
     );
   }
 
-  // Determinar la oferta líder y sugerencia del próximo valor
   const pujasOrdenadas = [...(subasta.pujas || [])].sort((a, b) => b.monto - a.monto);
   const ofertaMasAlta = pujasOrdenadas.length > 0 ? pujasOrdenadas.monto : subasta.precioBase;
   const esLiderActual = pujasOrdenadas.length > 0 && pujasOrdenadas.usuarioId === usuarioActualId;
