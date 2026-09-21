@@ -97,8 +97,10 @@ namespace TP_Subasta.Controllers
                 UrlImagen = request.UrlImagen,
                 PrecioBase = request.PrecioBase,
                 IncrementoMinimo = request.IncrementoMinimo,
+                FechaInicio = request.FechaInicio,
                 FechaFin = request.FechaFin,
                 VendedorId = request.VendedorId,
+                CategoriaId = request.CategoriaId,
                 Estado = DateTime.UtcNow >= request.FechaInicio ? EstadoSubasta.ACTIVA : EstadoSubasta.PROGRAMADA
             };
 

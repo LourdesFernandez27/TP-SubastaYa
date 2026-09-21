@@ -16,5 +16,6 @@ namespace Application.DTOs
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public int VendedorId { get; set; }
+        public int CategoriaId { get; set; }
     }
 }

@@ -15,10 +15,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("https://localhost:5173")
+        policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader() 
               .AllowAnyMethod(); 
     }); 
+});
+builder.Services.Configure<HostOptions>(options =>
+{
+options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
 });
 
 builder.Services.AddControllers();

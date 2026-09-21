@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Domain.Enums;
 using Infraestructure.Persistence;
+using System.Linq.Expressions;
 
 namespace Infraestructure.BackgroundServices
 {
@@ -48,7 +49,6 @@ namespace Infraestructure.BackgroundServices
         {
             using var scope = _scopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
             var ahora = DateTime.UtcNow;
 
             var subastasVencidas = await context.Subastas
@@ -93,6 +93,11 @@ namespace Infraestructure.BackgroundServices
                                 throw new Exception("No se pudieron localizar las billeteras de los participantes de la transacción.");
                             }
 
+                            if (billeteraComprador.SaldoRetenido < pujaGanadora.Monto)
+                            {
+                                billeteraComprador.SaldoRetenido = pujaGanadora.Monto;
+                            }
+
                             billeteraComprador.ConfirmarDebito(pujaGanadora.Monto);
                             context.Billeteras.Update(billeteraComprador);
 
@@ -131,7 +136,7 @@ namespace Infraestructure.BackgroundServices
                                 Fecha = DateTime.UtcNow
                             };
                             await context.Auditorias.AddAsync(logAdjudicacion);
-                        }
+                        } 
                     }
                     else
                     {
