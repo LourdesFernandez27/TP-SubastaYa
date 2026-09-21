@@ -74,5 +74,17 @@ export const apiService = {
       console.error("Falló la operación de depósito:", error);
       return { success: false, mensaje: "Error de red al realizar el depósito." };
     }
+  },
+  obtenerHistorialTransacciones: async (usuarioId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/wallet/historial?usuarioId=${usuarioId}`);
+      if (!response.ok) {
+        throw new Error(`Error HTTP al obtener historial: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Falló la consulta de historial de transacciones:", error);
+      throw error;
+    }
   }
 };
