@@ -43,7 +43,7 @@ Ejecutá el comando:
 Update-Database
 
 **Ejecutar el Backend (.NET Web API)**
-Abrí la solución SubastaYa.sln en Visual Studio 2022.
+Abrí la solución SubastaYa.sln (en la rama de github se ubica en Lourdes) en Visual Studio 2022.
 Presioná F5 o hacé clic en Play.
 La API iniciará y abrirá la documentación interactiva de Swagger en:
 https://localhost:7009/swagger.
@@ -53,7 +53,7 @@ Abrí la carpeta del proyecto frontend en la terminal.
 Instalá las dependencias y ejecutá el servidor de desarrollo:
 npm install
 npm start
-La aplicación web estará disponible en https://localhost:5173.
+La aplicación web estará disponible en https://localhost:5174.
 
 **Datos Semilla Precargados (Seed Data)**
 El sistema se inicializa automáticamente con los siguientes datos de prueba:
