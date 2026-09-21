@@ -49,7 +49,7 @@ La API iniciará y abrirá la documentación interactiva de Swagger en:
 https://localhost:7009/swagger.
 
 **Ejecutar el Frontend (React)**
-Abrí la carpeta del proyecto frontend en la terminal.
+Abrí la carpeta del proyecto frontend (en la rama de github se ubica en frontEnd) en la terminal.
 Instalá las dependencias y ejecutá el servidor de desarrollo:
 npm install
 npm start
