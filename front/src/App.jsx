@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PanelBilletera } from "./components/PanelBilletera"; 
 export const App = () => { 
-  // ID del usuario simulado en sesión (Ejemplo: ID 2 = comprador1) 
+
 const [usuarioId, setUsuarioId] = useState(2); 
 return ( 
   <div className = "app-container">

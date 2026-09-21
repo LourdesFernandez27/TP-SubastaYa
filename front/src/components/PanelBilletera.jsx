@@ -22,6 +22,10 @@ export const PanelBilletera = ({ usuarioId }) => {
     cargarBalance();
   }, [usuarioId]);
 
+if (errorCarga) {
+  return <p style= {{color : "red"}}> Error: {errorCarga}</p>
+}
+
   const manejarDeposito = async (e) => {
     e.preventDefault();
     setMensaje(null);
