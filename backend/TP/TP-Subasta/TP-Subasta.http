@@ -1,0 +1,6 @@
+@TP_Subasta_HostAddress = http://localhost:5202
+
+GET {{TP_Subasta_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

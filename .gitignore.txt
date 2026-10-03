@@ -1,0 +1,8 @@
+# Backend C#
+**/bin/
+**/obj/
+**/.vs/
+
+# Frontend
+node_modules/
+dist/
