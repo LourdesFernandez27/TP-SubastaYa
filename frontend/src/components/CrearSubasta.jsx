@@ -58,12 +58,17 @@ export const CrearSubasta = ({ vendedorId = 1, alCrearExitosa }) => {
 
     try {
       setCargando(true);
+      
       const payload = {
-        ...formData,
+        titulo :formData.titulo,
+        descripcion : formData.descripcion,
+        urlImagen: formData.urlImagen || "https://via.placeholder.com/300",
+        precioBase : pBase,
+        incrementoMinimo : incMin,
+        fechaInicio : inicio.toISOString(),
+        fechaFin : fin.toISOString(),
         vendedorId: vendedorId,
-        categoriaId: parseInt(formData.categoriaId),
-        precioBase: pBase,
-        incrementoMinimo: incMin
+        categoriaId: parseInt(formData.categoriaId)
       };
 
       const response = await fetch("https://localhost:7009/api/auctions", {

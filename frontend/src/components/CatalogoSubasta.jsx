@@ -1,15 +1,32 @@
 import React, { useState, useEffect } from "react";
 
+
 const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
   const [tiempoRestante, setTiempoRestante] = useState("");
   const [esCritico, setEsCritico] = useState(false);
   const [finalizado, setFinalizado] = useState(false);
 
+  
+  const id = subasta.id || subasta.Id;
+  const titulo = subasta.titulo || subasta.Titulo || "Sin título";
+  const uriImagen = subasta.uriImagen || subasta.UriImagen || "https://via.placeholder.com/300x180?text=SubastaYa";
+  const estadoRaw = subasta.estado !== undefined && subasta.estado !== null ? subasta.estado : (subasta.Estado || "ACTIVA");
+  const estado = estadoRaw.toString().toUpperCase();
+  const categoriaId = Number(subasta.categoriaId || subasta.CategoriaId || 1);
+  const precioBase = Number(subasta.precioBase || subasta.PrecioBase || 0);
+  const fechaFin = subasta.fechaFin || subasta.FechaFin;
+  const pujas = subasta.pujas || subasta.Pujas || [];
+
+  const totalOfertas = pujas.length;
+  const ofertaMasAlta = totalOfertas > 0
+    ? Math.max(...pujas.map((p) => Number(p.monto || p.Monto || 0)))
+    : precioBase;
+
   useEffect(() => {
     const calcularTiempo = () => {
-      if (!subasta.fechaFin) return;
+      if (!fechaFin) return;
       const ahora = new Date().getTime();
-      const fin = new Date(subasta.fechaFin).getTime();
+      const fin = new Date(fechaFin).getTime();
       const diferencia = fin - ahora;
 
       if (diferencia <= 0) {
@@ -19,13 +36,9 @@ const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
       } else {
         const segsTotales = Math.floor(diferencia / 1000);
         const mins = Math.floor(segsTotales / 60);
-        const critico = segsTotales <= 300;
         const segs = segsTotales % 60;
-        const txtMins = mins < 10 ? `0${mins}` : `${mins}`;
-        const txtSegs = segs < 10 ? `0${segs}` : `${segs}`;
-
-        setTiempoRestante(`${txtMins}:${txtSegs}`);
-        setEsCritico(critico && !finalizado);
+        setTiempoRestante(`${mins < 10 ? "0" : ""}${mins}:${segs < 10 ? "0" : ""}${segs}`);
+        setEsCritico(segsTotales <= 300 && (estado === "ACTIVA" || estado === "1"));
         setFinalizado(false);
       }
     };
@@ -33,13 +46,7 @@ const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
     calcularTiempo();
     const interval = setInterval(calcularTiempo, 1000);
     return () => clearInterval(interval);
-  }, [subasta]);
-
-  const pujas = subasta.pujas || [];
-  const totalOfertas = pujas.length;
-  const ofertaMasAlta = totalOfertas > 0
-    ? Math.max(...pujas.map((p) => p.monto))
-    : subasta.precioBase;
+  }, [fechaFin, estado]);
 
   const mapaCategorias = {
     1: "Tecnología",
@@ -53,25 +60,24 @@ const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
       <div>
         <div style={{ position: "relative" }}>
           <img
-            src={subasta.urlImagen || "https://via.placeholder.com/300x180?text=SubastaYa"}
-            alt={subasta.titulo}
+            src={uriImagen}
+            alt={titulo}
             style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }}
           />
           <span
-            className={`badge badge-${subasta.estado ? String(subasta.estado).toLowerCase() : "activa"}`}
+            className={`badge badge-${estado.toLowerCase()}`}
             style={{ position: "absolute", top: "10px", right: "10px" }}
           >
-            {subasta.estado}
+            {estado === "1" ? "ACTIVA" : estado === "0" ? "PROGRAMADA" : estado}
           </span>
         </div>
 
         <div style={{ marginTop: "12px" }}>
-   
           <span style={{ fontSize: "0.8rem", color: "#666", textTransform: "uppercase", fontWeight: "bold" }}>
-            🏷️ {mapaCategorias[subasta.categoriaId] || `Categoría #${subasta.categoriaId}`}
+            🏷️ {mapaCategorias[categoriaId] || `Categoría #${categoriaId}`}
           </span>
 
-          <h3 style={{ margin: "6px 0 10px 0", fontSize: "1.2rem" }}>{subasta.titulo}</h3>
+          <h3 style={{ margin: "6px 0 10px 0", fontSize: "1.2rem" }}>{titulo}</h3>
 
           <div style={{ marginBottom: "15px" }}>
             <small style={{ color: "#888", display: "block" }}>Tiempo Restante:</small>
@@ -86,7 +92,7 @@ const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f8f9fa", padding: "10px", borderRadius: "6px" }}>
             <div>
               <small style={{ color: "#666", display: "block" }}>Oferta Más Alta</small>
-              <strong style={{ fontSize: "1.2rem", color: "#198754" }}>{"$"+ofertaMasAlta}</strong>
+              <strong style={{ fontSize: "1.2rem", color: "#198754" }}>\${ofertaMasAlta}</strong>
             </div>
             <div style={{ textAlign: "right" }}>
               <small style={{ color: "#666", display: "block" }}>Total Ofertas</small>
@@ -97,7 +103,7 @@ const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
       </div>
 
       <button
-        onClick={() => alSeleccionarSubasta(subasta.id)}
+        onClick={() => alSeleccionarSubasta(id)}
         style={{
           width: "100%",
           backgroundColor: "#0d6efd",
@@ -127,15 +133,40 @@ export const CatalogoSubasta = ({ alSeleccionarSubasta }) => {
   const cargarSubastas = async () => {
     try {
       setCargando(true);
-      const res = await fetch("https://localhost:7009/api/auctions");
+      
+      const res = await fetch("https://localhost:7009/api/auctions?page=1&pageSize=50");
       if (!res.ok) {
         throw new Error(`Error HTTP al obtener catálogo: ${res.status}`);
       }
-      const data = await res.json();
-      const lista = data.items || data.Items || data.$values || data.data || data ||[];
-      setSubastas(Array.isArray(lista)?lista:[]);
+      
+      const raw = await res.json();
+      console.log("RAW BACKEND:", raw);
+
+      
+      let lista = [];
+      if (Array.isArray(raw)) {
+        lista = raw;
+      } else if (raw.items) {
+        lista = Array.isArray(raw.items) ? raw.items : (raw.items.$values || []);
+      } else if (raw.data?.items) {
+        lista = Array.isArray(raw.data.items) ? raw.data.items : (raw.data.items.$values || []);
+      } else if (raw.$values) {
+        lista = raw.$values;
+      } else if (raw.data?.$values) {
+        lista = raw.data.$values;
+      } else if (Array.isArray(raw.data)) {
+        lista = raw.data;
+      }
+      
+      console.log("LISTA FINAL DE SUBASTAS:", lista);
+      setSubastas(lista);
+
     } catch (err) {
-      console.error("Falló la carga del catálogo de subastas:", err);
+      console.error("Falló la carga del catálogo:", err);
+      const guardadas = JSON.parse(
+        localStorage.getItem("subastas") || localStorage.getItem("misSubastas") || "[]"
+      );
+      setSubastas(guardadas);
     } finally {
       setCargando(false);
     }
@@ -145,37 +176,43 @@ export const CatalogoSubasta = ({ alSeleccionarSubasta }) => {
     cargarSubastas();
   }, []);
 
-  const subastasFiltradas = (subastas || [])
+  const subastasFiltradas = subastas
     .filter((subasta) => {
+      const titulo = (subasta.titulo || subasta.Titulo || "").toLowerCase();
+      const descripcion = (subasta.descripcion || subasta.Descripcion || "").toLowerCase();
+      const estado = (subasta.estado !== undefined && subasta.estado !== null ? subasta.estado : subasta.Estado || "").toString().toUpperCase();
+      const categoriaId = Number(subasta.categoriaId || subasta.CategoriaId);
 
       const coincideTexto =
-        subasta.titulo.toLowerCase().includes(busquedaTexto.toLowerCase()) ||
-        (subasta.descripcion && subasta.descripcion.toLowerCase().includes(busquedaTexto.toLowerCase()));
+        !busquedaTexto ||
+        titulo.includes(busquedaTexto.toLowerCase()) ||
+        descripcion.includes(busquedaTexto.toLowerCase());
 
       const coincideEstado =
         filtroEstado === "TODOS" ||
-        (filtroEstado === "ACTIVA" && subasta.estado === "ACTIVA") ||
-        (filtroEstado === "PROGRAMADA" && (subasta.estado === "PROGRAMADA" || subasta.estado === "PROXIMA")) ||
-        (filtroEstado === "FINALIZADA" && (subasta.estado === "FINALIZADA" || subasta.estado === "DESIERTA"));
+        estado === filtroEstado ||
+        (filtroEstado === "ACTIVA" && (estado === "ACTIVA" || estado === "ACTIVO" || estado === "1")) ||
+        (filtroEstado === "PROGRAMADA" && (estado === "PROGRAMADA" || estado === "PROXIMA" || estado === "0")) ||
+        (filtroEstado === "FINALIZADA" && (estado === "FINALIZADA" || estado === "DESIERTA" || estado === "2"));
 
       const coincideCategoria =
-        filtroCategoria === "TODAS" || subasta.categoriaId === parseInt(filtroCategoria);
+        filtroCategoria === "TODAS" || categoriaId === Number(filtroCategoria);
 
       return coincideTexto && coincideEstado && coincideCategoria;
     })
     .sort((a, b) => {
       if (ordenamiento === "TIEMPO_MENOR") {
-        const finA = new Date(a.fechaFin).getTime();
-        const finB = new Date(b.fechaFin).getTime();
+        const finA = new Date(a.fechaFin || a.FechaFin).getTime();
+        const finB = new Date(b.fechaFin || b.FechaFin).getTime();
         return finA - finB;
       }
-
       if (ordenamiento === "PUJA_MAYOR") {
-        const maxA = a.pujas && a.pujas.length > 0 ? Math.max(...a.pujas.map((p) => p.monto)) : a.precioBase;
-        const maxB = b.pujas && b.pujas.length > 0 ? Math.max(...b.pujas.map((p) => p.monto)) : b.precioBase;
+        const pujasA = a.pujas || a.Pujas || [];
+        const pujasB = b.pujas || b.Pujas || [];
+        const maxA = pujasA.length > 0 ? Math.max(...pujasA.map((p) => p.monto || p.Monto)) : (a.precioBase || a.PrecioBase);
+        const maxB = pujasB.length > 0 ? Math.max(...pujasB.map((p) => p.monto || p.Monto)) : (b.precioBase || b.PrecioBase);
         return maxB - maxA;
       }
-
       return 0;
     });
 
@@ -259,7 +296,7 @@ export const CatalogoSubasta = ({ alSeleccionarSubasta }) => {
             <div className="grid-catalogo">
               {subastasFiltradas.map((subasta, i) => (
                 <TarjetaSubastaCard
-                  key={subasta.id || i}
+                  key={subasta.id || subasta.Id || i}
                   subasta={subasta}
                   alSeleccionarSubasta={alSeleccionarSubasta}
                 />

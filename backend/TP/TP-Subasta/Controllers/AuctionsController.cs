@@ -105,8 +105,8 @@ namespace TP_Subasta.Controllers
                 FechaFin = request.FechaFin,
                 VendedorId = request.VendedorId,
                 CategoriaId = request.CategoriaId,
-                Estado = EstadoSubasta.ACTIVA,
-                //Estado = DateTime.Now >= request.FechaInicio ? EstadoSubasta.ACTIVA : EstadoSubasta.PROGRAMADA
+                //Estado = EstadoSubasta.ACTIVA,
+                Estado = DateTime.Now >= request.FechaInicio ? EstadoSubasta.ACTIVA : EstadoSubasta.PROGRAMADA
             };
 
             await _context.Subastas.AddAsync(subasta);

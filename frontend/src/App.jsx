@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import { CatalogoSubasta } from "./components/CatalogoSubasta";
-import { CrearSubasta } from "./components/CrearSubasta";
-import { SalasSubastaVivo } from "./components/SalasSubastaVivo"; 
-import { PanelBilletera } from "./components/PanelBilletera";
-import { MisActividades } from "./components/MisActividades";
+import { CatalogoSubasta }  from "./components/CatalogoSubasta";
+import { CrearSubasta}  from "./components/CrearSubasta";
+import { SalasSubastaVivo }  from "./components/SalasSubastaVivo"; 
+import { PanelBilletera }  from "./components/PanelBilletera";
+import { MisActividades }  from "./components/MisActividades";
 
 import "./App.css";
 

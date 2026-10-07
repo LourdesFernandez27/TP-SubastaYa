@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -35,7 +36,7 @@ namespace Domain.Entities
             }
             if (SaldoDisponible < monto)
             {
-                throw new InvalidOperationException("Saldo disponible insuficiente para realizar la retención.");
+                throw new NegocioException("Saldo disponible insuficiente para realizar la retención.");
             }
             SaldoDisponible -= monto;
             SaldoRetenido += monto;
@@ -49,7 +50,7 @@ namespace Domain.Entities
             }
             if (SaldoRetenido < monto)
             {
-                throw new InvalidOperationException("No se puede liberar más saldo del que está retenido.");
+                throw new NegocioException("No se puede liberar más saldo del que está retenido.");
             }
             SaldoRetenido -= monto;
             SaldoDisponible += monto;
@@ -63,7 +64,7 @@ namespace Domain.Entities
             }
             if (SaldoRetenido < monto)
             {
-                throw new InvalidOperationException("No hay suficiente saldo retenido para confirmar el débito.");
+                throw new NegocioException("No hay suficiente saldo retenido para confirmar el débito.");
             }
             SaldoRetenido -= monto;
         }

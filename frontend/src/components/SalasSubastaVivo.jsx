@@ -1,14 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as signalR from "@microsoft/signalr";
 
-export const SalasSubastaVivo = ({ subastaId = 1, usuarioActualId = 3 }) => {
+export const SalasSubastaVivo = ({ subastaId = 1, alVolver, usuarioActualId = 3 }) => {
   const [subasta, setSubasta] = useState(null);
   const [montoPersonalizado, setMontoPersonalizado] = useState("");
   const [tiempoRestante, setTiempoRestante] = useState({ minutos: 0, segundos: 0, esCritico: false });
   const [notificacion, setNotificacion] = useState({ mensaje: "", tipo: "" });
   const [cargandoPuja, setCargandoPuja] = useState(false);
 
-  const cargarDetalleSubasta = async () => {
+  const cargarDetalleSubasta = useCallback(async () => {
+  try {
+    const res = await fetch(`https://localhost:7009/api/auctions/${subastaId}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.json();
+
+    // Desempaquetado que vos ya usaste en el catálogo
+    let data = raw;
+    if (raw.$values) data = raw.$values[0] || raw.$values;
+    if (data.pujas?.$values) data.pujas = data.pujas.$values;
+    if (data.Pujas?.$values) data.Pujas = data.Pujas.$values;
+
+    setSubasta(data);
+  } catch (err) {
+    console.error("Falló detalle:", err);
+  }
+}, [subastaId] );
+
+/*  const cargarDetalleSubasta = async () => {
     try {
       const res = await fetch(`https://localhost:7009/api/auctions/${subastaId}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -17,15 +35,15 @@ export const SalasSubastaVivo = ({ subastaId = 1, usuarioActualId = 3 }) => {
     } catch (err) {
       console.error("Falló al consultar el detalle de la subasta:", err);
     }
-  };
-  // Carga en tiempo real utilizando WebSockets (SignalR)
+  };*/
+  
 useEffect(() => {
-  // 1. Carga inicial de la subasta al entrar a la pantalla
+  
   cargarDetalleSubasta();
 
-  // 2. Crear la conexión de WebSockets con el backend
+
   const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:7009/auctionHub") 
+    .withUrl("https://localhost:7009/auctionHub") 
     .withAutomaticReconnect()
     .build();
 
@@ -49,13 +67,13 @@ useEffect(() => {
       connection.stop();
     }
   };
-}, [subastaId]);
+}, [subastaId, cargarDetalleSubasta]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     cargarDetalleSubasta();
-    const interval = setInterval(cargarDetalleSubasta, 3000); 
-    return () => clearInterval(interval);
-  }, [subastaId]);
+    const intervaloDatos = setInterval(cargarDetalleSubasta, 3000); 
+    return () => clearInterval(intervaloDatos);
+  }, [subastaId]);*/
 
   useEffect(() => {
     if (!subasta || !subasta.fechaFin) return;
@@ -90,7 +108,7 @@ useEffect(() => {
 :Number(subasta?.precioBase || subasta?.precio || subasta?.precioInicial || 0);
   const pujaSugerida = ofertaMasAlta + Number(subasta?.incrementoMinimo || 5000);
 
-  const esLiderActual = pujasOrdenadas.length > 0 && pujasOrdenadas.usuarioId === usuarioActualId;
+  const esLiderActual = pujasOrdenadas.length > 0 && pujasOrdenadas[0].usuarioId === usuarioActualId;
 
   const ejecutarPuja = async (montoAOfertar) => {
     setNotificacion({ mensaje: "", tipo: "" });
@@ -137,6 +155,9 @@ useEffect(() => {
   };
 
   return (
+  <div>
+    <button onClick={alVolver} style={{marginBottom:"10px", cursor:"pointer"}}>⬅️ Volver al Catálogo</button>
+      
     <div className="sala-subasta-container" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "20px" }}>
  
       <div className="card">
@@ -246,7 +267,7 @@ useEffect(() => {
                   padding: "10px",
                   borderBottom: "1px solid #eee",
                   display: "flex",
-                  justifySpace: "space-between",
+                  justifyContent: "space-between",
                   alignItems: "center"
                 }}
               >
@@ -262,6 +283,7 @@ useEffect(() => {
           )}
         </ul>
       </div>
+    </div>
     </div>
   );
 };
