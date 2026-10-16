@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Domain.Exceptions;
+using System.ComponentModel.DataAnnotations;
+
+namespace Domain.Entities
+{
+    public class Billetera
+    {
+        public int Id { get; set; }
+        public int UsuarioId { get; set; }
+        public decimal SaldoDisponible { get; set; }
+        public decimal SaldoRetenido { get; set; }
+        public decimal SaldoTotal
+        {
+            get { return SaldoDisponible + SaldoRetenido; }
+        }
+        [ConcurrencyCheck]
+        public uint Version { get; set; }
+        public Usuario Usuario { get; set; } = null!;
+        public void Depositar(decimal monto)
+        {
+            if (monto <= 0)
+            {
+                throw new ArgumentException("El monto a depositar debe ser mayor a cero.");
+            }
+            SaldoDisponible += monto;
+            Version++;
+        }
+
+             public void Retener(decimal monto)
+        {
+            if (monto <= 0)
+            {
+                throw new ArgumentException("El monto a retener debe ser mayor a cero.");
+            }
+            if (SaldoDisponible < monto)
+            {
+                throw new NegocioException("Saldo disponible insuficiente para realizar la retención.");
+            }
+            SaldoDisponible -= monto;
+            SaldoRetenido += monto;
+            Version++;
+        }
+
+        public void Liberar(decimal monto)
+        {
+            if (monto <= 0)
+            {
+                throw new ArgumentException("El monto a liberar debe ser mayor a cero.");
+            }
+            if (SaldoRetenido < monto)
+            {
+                throw new NegocioException("No se puede liberar más saldo del que está retenido.");
+            }
+            SaldoRetenido -= monto;
+            SaldoDisponible += monto;
+            Version++;
+        }
+
+        public void ConfirmarDebito(decimal monto)
+        {
+            if (monto <= 0)
+            {
+                throw new ArgumentException("El monto del débito debe ser mayor a cero.");
+            }
+            if (SaldoRetenido < monto)
+            {
+                throw new NegocioException("No hay suficiente saldo retenido para confirmar el débito.");
+            }
+            SaldoRetenido -= monto;
+            Version++;
+        }
+    }
+
+}
+
