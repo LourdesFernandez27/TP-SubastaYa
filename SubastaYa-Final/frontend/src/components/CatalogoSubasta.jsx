@@ -226,7 +226,36 @@ const ahora = new Date().getTime();
 
       return coincideTexto && coincideEstado && coincideCategoria;
     })
+
     .sort((a, b) => {
+      const parseUTC = (f) => {
+        const s = (f || "").toString();
+        return new Date(s.endsWith('Z') ? s : `${s}Z`).getTime();
+      };
+      const ahora = new Date().getTime();
+
+      if (ordenamiento === "TIEMPO_MENOR") {
+        const finA = parseUTC(a.fechaFin || a.FechaFin);
+        const finB = parseUTC(b.fechaFin || b.FechaFin);
+        const vencidaA = finA < ahora;
+        const vencidaB = finB < ahora;
+
+        if (vencidaA && !vencidaB) return 1;
+        if (!vencidaA && vencidaB) return -1;
+
+        return finA - finB;
+      }
+      if (ordenamiento === "PUJA_MAYOR") {
+        const getMax = (s) => {
+          const p = s.pujas || s.Pujas || [];
+          return p.length > 0 ? Math.max(...p.map(x => Number(x.monto || x.Monto || 0))) : Number(s.precioBase || s.PrecioBase || 0);
+        };
+        return getMax(b) - getMax(a);
+      }
+      return 0;
+    })
+
+    /* .sort((a, b) => {
       if (ordenamiento === "TIEMPO_MENOR") {
         const finA = new Date(a.fechaFin || a.FechaFin).getTime();
         const finB = new Date(b.fechaFin || b.FechaFin).getTime();
@@ -240,7 +269,7 @@ const ahora = new Date().getTime();
         return maxB - maxA;
       }
       return 0;
-    });
+    }); */
 
   /*const subastasFiltradas = subastas
     .filter((subasta) => {

@@ -1,12 +1,53 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, use } from "react";
 import * as signalR from "@microsoft/signalr";
+const calcularTiempoRestante = (fechaFin) => {
+  if (!fechaFin) return {finalizado: false, horas: "--", minutos: "--", segundos: "--", esCritico: false};
+  
+  const ahora = new Date().getTime();
+  const fechaStr = fechaFin.toString();
+  const fin = new Date(fechaStr.endsWith('Z') ? fechaStr: `${fechaStr}Z`).getTime();
+  const diferencia = fin - ahora;
+
+  if (diferencia <=0) {
+    return {finalizado: true, horas: 0, minutos: 0, segundos: 0, esCritico: true};
+  }
+  const totalSegundos = Math.floor(diferencia  / 1000);
+  const horas = String(Math.floor(totalSegundos / 3600)).padStart(2,'0');
+  const minutos = String(Math.floor((totalSegundos % 3600) / 60)).padStart(2,'0');
+  const segundos = String(totalSegundos % 60).padStart(2, '0');
+
+  const esCritico = totalSegundos <= 300;
+  return {finalizado: false, horas, minutos, segundos, esCritico};
+};
+
+const TemporizadorBadge= ({fechaFin}) => {
+  const [tiempo, setTiempo] = useState(() => calcularTiempoRestante(fechaFin));
+  
+  useEffect(() => {
+    if (!fechaFin) return;
+    setTiempo(calcularTiempoRestante(fechaFin));
+
+    const intervalo = setInterval(() => {
+      setTiempo(calcularTiempoRestante(fechaFin));
+    }, 1000);
+    return () => clearInterval(intervalo);
+  }, [fechaFin]);
+
+  return (
+    <span style= {{backgroundColor: tiempo.esCritico ? "#dc3545" : "#198754",
+      color: "#ffffff", padding: "4px 8px", fontSize: "12px", fontWeight: "bold", display: "inline-flex", alignItems: "center", gap: "4px"}}>
+      ⏱️ {tiempo.finalizado ? "FINALIZADA" : `${tiempo.horas}:${tiempo.minutos}:${tiempo.segundos}`}
+      </span>
+  );
+};
 
 export const SalasSubastaVivo = ({ subastaId, alVolver, usuarioActualId, usuarioId, UsuarioActual, onSeleccionarSubasta }) => {
   const [subasta, setSubasta] = useState(null);
   const [subastasActivas, setSubastasActivas] = useState([]);
   const [cargandoLista, setCargandoLista] = useState(false);
   const [montoPersonalizado, setMontoPersonalizado] = useState("");
-  const [tiempoRestante, setTiempoRestante] = useState({ horas: 0 ,minutos: 0, segundos: 0, esCritico: false });
+  const [tiempoRestante, setTiempoRestante] = useState({ horas: 0 ,minutos: 0, segundos: 0, esCritico: false, finalizado: false });
+  const [, setTick] = useState(0);
   const [notificacion, setNotificacion] = useState({ mensaje: "", tipo: "" });
   const [cargandoPuja, setCargandoPuja] = useState(false);
   const idUsuarioActivo = usuarioActualId || usuarioId || UsuarioActual?.id;
@@ -27,17 +68,6 @@ export const SalasSubastaVivo = ({ subastaId, alVolver, usuarioActualId, usuario
     console.error("Falló detalle:", err);
   }
 }, [subastaId] );
-
-/*  const cargarDetalleSubasta = async () => {
-    try {
-      const res = await fetch(`https://localhost:7009/api/auctions/${subastaId}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setSubasta(data);
-    } catch (err) {
-      console.error("Falló al consultar el detalle de la subasta:", err);
-    }
-  };*/
   
   useEffect(() => {
     if (!subastaId) {
@@ -112,32 +142,21 @@ useEffect(() => {
   };
 }, [subastaId, cargarDetalleSubasta]);
 
-  /*useEffect(() => {
-    cargarDetalleSubasta();
-    const intervaloDatos = setInterval(cargarDetalleSubasta, 3000); 
-    return () => clearInterval(intervaloDatos);
-  }, [subastaId]);*/
+  useEffect(() => {
+    if (subasta) return;
+    const timerLista = setInterval (() => setTick((prev) => prev + 1), 1000);
+    return () => clearInterval(timerLista);
+  }, [subasta]);
 
   useEffect(() => {
     if (!subasta || !subasta.fechaFin) return;
 
     const timer = setInterval(() => {
-      const ahora = new Date().getTime();
-      const fechaStr = subasta.fechaFin?.toString()|| "";
-      const fin = new Date(fechaStr.endsWith('Z')?fechaStr:`${fechaStr}Z`).getTime();
-      const diferencia = fin - ahora;
-
-      if (diferencia <= 0) {
-        setTiempoRestante({ horas: 0,minutos: 0, segundos: 0, esCritico: false, finalizado: true });
-        clearInterval(timer);
-      } else {
-        const segsTotales = Math.floor(diferencia / 1000);
-        const horas = Math.floor(segsTotales / 3600);
-        const mins = Math.floor((segsTotales % 3600) / 60);
-        const segs = segsTotales % 60;
-        const esCritico = segsTotales <= 60;
-        setTiempoRestante({ horas: horas, minutos: mins, segundos: segs, esCritico, finalizado: false });
-      }
+      const resultado = calcularTiempoRestante(subasta.fechaFin);
+        setTiempoRestante(resultado);
+        if (resultado.finalizado) {
+          clearInterval(timer);
+        }
     }, 1000);
 
     return () => clearInterval(timer);
@@ -157,16 +176,27 @@ useEffect(() => {
         ) : (
         <div style= {{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px", marginTop: "20px"}}>
           {subastasActivas.map((s) => (
-            <div key= {s.id || s.Id} style= {{border: "2px solid #e02424", borderRadius: "10px", padding: "15px", backgroundColor: "#fff"}}>
-              <span style= {{backgroundColor: "e02424", color: "white", padding: "3px 8px", borderRadius: "4px", fontSize: "12px", fontWeight: "bold"}}>
-                EN VIVO
-              </span>
-              <h3 style= {{marginTop: "10px"}}> {s.titulo || s.Titulo} </h3>
-              <p> Precio base: <strong> ${s.precioBase || s.PrecioBase} </strong></p>
-              <button onClick= {() => onSeleccionarSubasta(s.id || s.Id)} 
-                style= {{width: "100%", padding: "10px", backgroundColor: "#e02424", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold"}}> 
-                Ingresar a la sala </button>
-            </div>
+               <div key= {s.id || s.Id} 
+                style= {{
+                  border: "2px solid #e02424", borderRadius: "10px", padding: "15px", backgroundColor: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.08)"}}>
+                  
+                <div style= {{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px"}}>
+                  <span style= {{backgroundColor: "#e02424", color: "white", padding: "3px 8px", borderRadius: "4px", fontSize: "12px", fontWeight: "bold"}}>
+                    EN VIVO
+                  </span>
+                <TemporizadorBadge fechaFin = {s.fechaFin || s.FechaFin} />
+               </div>
+
+               <h3 style= {{ marginTop: "10px"}}> 
+                {s.titulo || s.Titulo} </h3>
+                <p style= {{margin: "5px 0 15px 0"}}>
+                  Precio base: <strong>${s.precioBase || s.PrecioBase}</strong>
+                </p>
+                <button onClick= {() => onSeleccionarSubasta(s.id || s.Id)}
+                style= {{width: "100%", padding: "10px", backgroundColor: "#e02424", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold"}}>
+                  Ingresar a la sala
+                </button>
+                </div>
           ))}
         </div>
       )}

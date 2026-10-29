@@ -111,9 +111,9 @@
     background: #e0f2f1; 
     color: #00695c; }  
 
-    .badge-critica {
-  background: #ff4d4f !important;
-  color: white !important;
+  .badge-critica {
+  background: #ff4d4f;
+  color: white;
   font-weight: bold;
   animation: pulse 1s infinite;
   padding: 6px 12px;
@@ -124,6 +124,17 @@
   color: white;
   padding: 6px 12px;
   border-radius: 12px;
+  font-weight: bold;
+}
+.bade-temporizador {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.3s ease;
 }
 @keyframes pulse {
   0% { transform: scale(1); }

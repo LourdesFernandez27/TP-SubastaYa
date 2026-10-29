@@ -189,7 +189,7 @@ export const MisActividades = ({ usuarioId, esVendedor, rol }) => {
                         Precio Base: ${pub.precioBase} | Total de Ofertas: {pub.pujas ? pub.pujas.length : 0}
                       </small>
                       <div style={{ fontSize: "0.95rem", marginTop: "5px" }}>
-                        Métrica de Recaudación: <strong style={{ color: "#198754" }}>${recaudacion}</strong>
+                        Recaudación: <strong style={{ color: "#198754" }}>${recaudacion}</strong>
                       </div>
                     </div>
                     <div style={{ textAlign: "right" }}>
