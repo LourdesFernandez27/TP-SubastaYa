@@ -16,7 +16,7 @@ const calcularTiempoRestante = (fechaFin) => {
   const minutos = String(Math.floor((totalSegundos % 3600) / 60)).padStart(2,'0');
   const segundos = String(totalSegundos % 60).padStart(2, '0');
 
-  const esCritico = totalSegundos <= 300;
+  const esCritico = totalSegundos <= 60;
   return {finalizado: false, horas, minutos, segundos, esCritico};
 };
 
@@ -34,10 +34,13 @@ const TemporizadorBadge= ({fechaFin}) => {
   }, [fechaFin]);
 
   return (
-    <span style= {{backgroundColor: tiempo.esCritico ? "#dc3545" : "#198754",
-      color: "#ffffff", padding: "4px 8px", fontSize: "12px", fontWeight: "bold", display: "inline-flex", alignItems: "center", gap: "4px"}}>
-      ⏱️ {tiempo.finalizado ? "FINALIZADA" : `${tiempo.horas}:${tiempo.minutos}:${tiempo.segundos}`}
+    <div className={`badge ${tiempo.esCritico ? "badge-critica" : "badge-activa"}`}
+    style= {{display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem', padding: '4px 10px', borderRadius: '14px', 
+      fontWeight: 'bold', userSelect: 'none'}}>
+    <span> ⏱️ </span>
+    <span> {tiempo.finalizado ? "FINALIZADA" : `${tiempo.horas}:${tiempo.minutos}:${tiempo.segundos}`}
       </span>
+    </div>
   );
 };
 
@@ -193,7 +196,7 @@ useEffect(() => {
                   Precio base: <strong>${s.precioBase || s.PrecioBase}</strong>
                 </p>
                 <button onClick= {() => onSeleccionarSubasta(s.id || s.Id)}
-                style= {{width: "100%", padding: "10px", backgroundColor: "#e02424", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold"}}>
+                style= {{width: "100%", padding: "10px", backgroundColor: "#183bd4", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold"}}>
                   Ingresar a la sala
                 </button>
                 </div>
@@ -248,6 +251,16 @@ useEffect(() => {
   if (!subasta) return <div style= {{padding: "20px"}}> Cargando sala de subasta en vivo...</div>;
   const pujas = subasta?.pujas || subasta?.Pujas || [];
   const pujasOrdenadas = [...pujas].sort((a, b) => Number(b.monto ?? b.Monto ?? 0) - Number(a.monto ?? a.Monto ?? 0));
+  
+  const idsUnicos = [... new Set(pujasOrdenadas.map(p => p.usuarioId ?? p.compradorId).filter(Boolean))].sort((a,b) => Number(a) - Number(b));
+  const mapaCompradores = Object.fromEntries(idsUnicos.map((id,i) => [id, `Comprador ${i+1}`]));
+  
+  const getNombreAuditoria = (puja) => {
+    const id = puja.usuarioId ?? puja.compradorId;
+    if (!id) return "Comprador ?";
+    return mapaCompradores[id] || `Comprador ${id}`;
+  };
+
   const ofertaMasAlta = pujasOrdenadas.length > 0 ? Number(pujasOrdenadas[0]?.monto || pujasOrdenadas[0]?.Monto || 0) : Number(subasta?.precioBase || subasta?.PrecioBase || 0);
   const pujaSugerida = ofertaMasAlta + Number(subasta?.incrementoMinimo || 2000);
   const compradorLider = pujasOrdenadas.length > 0 ? Number(pujasOrdenadas[0]?.usuarioId ?? pujasOrdenadas[0]?.UsuarioId ?? 0) : 0; 
@@ -260,16 +273,20 @@ useEffect(() => {
   };
 
   return (
-    <div className= "sala-individual-container" style= {{padding: "20px"}}> 
-      <button onClick= {handleVolver} style= {{marginBottom: "15px"}}>
+    <div className= "sala-individual-container" style= {{padding: '20px', maxWidth: '1200px', margin: '0 auto'}}> 
+      <button onClick= {handleVolver} style= {{marginBottom: '15px', padding: '8px 14px', borderRadius: '6px', cursor: 'pointer'}}>
          Volver a la lista de salas en vivo
       </button>
 
-      <h2> {subasta.titulo || subasta.Titulo} </h2>
-      
-      <div style= {{backgroundColor: tiempoRestante.esCritico ? "#f0f0f0" : "#fff", padding: "10px", borderRadius: "8px", margin: "10px 0"}}>
-        Tiempo restante: <strong> {tiempoRestante.horas}h {tiempoRestante.minutos}m {tiempoRestante.segundos}s </strong>
-        {tiempoRestante.finalizado && (<span style= {{color: "red", fontWeight: "bold" }}> (¡Finalizada!) </span>)}
+      <div className= "sala-subasta-container" style= {{display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', alignItems: 'start'}}>
+        <div className="card" style= {{background: '#fff', padding: '10px', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.08'}}>
+
+          <div style= {{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px'}}>
+          <h2 style={{margin: 0, color: '#000'}}> {subasta.titulo || subasta.Titulo} </h2>
+        <div className= {`badge ${tiempoRestante.esCritico ? 'badge-critica' : 'badge-activa'}`} 
+        style= {{fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '6px'}}>
+          ⏱️{tiempoRestante.finalizado ? "FINALIZADA" : `${tiempoRestante.horas}:${String(tiempoRestante.minutos).padStart(2,'0')}:${String(tiempoRestante.segundos).padStart(2,'0')}`}
+      </div>
       </div>
 
       <div style={{ margin: "10px 0", lineHeight: "1.4" }}>
@@ -364,9 +381,10 @@ useEffect(() => {
             </button>
           </div>
         </div>
+      </div>
 
-      <div className="card">
-        <h3>📜 Historial en Vivo</h3>
+      <div className="card" style= {{background: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)'}}>
+        <h3 style= {{marginTop: 0}}>📜 Historial en Vivo</h3>
         <ul style={{ listStyle: "none", padding: 0, marginTop: "15px" }}>
           {pujasOrdenadas.length === 0 ? (
             <li style={{ color: "#888" }}>Sin ofertas registradas.</li>
@@ -383,7 +401,7 @@ useEffect(() => {
                 }}
               >
                 <div>
-                  <strong>User #{puja.usuarioId}</strong>
+                  <strong> {getNombreAuditoria(puja)}</strong>
                   <div style={{ fontSize: "0.8rem", color: "#888" }}>
                     {new Date(puja.fechaPuja + 'Z').toLocaleString('es-AR',{timeZone: 'America/Argentina/Buenos_Aires'})}
                   </div>
@@ -394,6 +412,7 @@ useEffect(() => {
           )}
         </ul>
       </div>
+    </div>
     </div>
   );
 };

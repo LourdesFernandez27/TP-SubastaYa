@@ -118,7 +118,6 @@ export const PanelBilletera = ({ usuarioId }) => {
       )}
     </div>
 
-    {/* Historial de Movimientos */}
     <div className="Seccion-historial">
       <h3>Historial de Movimientos</h3>
 

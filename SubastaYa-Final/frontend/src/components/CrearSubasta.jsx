@@ -189,7 +189,7 @@ export const CrearSubasta = ({ usuarioActual, alCrearExitosa, onVolverAlCatalogo
 
         <div style={{ display: "flex", gap: "10px" }}>
           <div style={{ flex: 1 }}>
-            <label>Precio Base (\$):</label>
+            <label>Precio Base ($):</label>
             <input
               type="number"
               name="precioBase"
@@ -201,7 +201,7 @@ export const CrearSubasta = ({ usuarioActual, alCrearExitosa, onVolverAlCatalogo
             />
           </div>
           <div style={{ flex: 1 }}>
-            <label>Incremento Mínimo (\$):</label>
+            <label>Incremento Mínimo ($):</label>
             <input
               type="number"
               name="incrementoMinimo"

@@ -6,8 +6,6 @@ const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
   const [esCritico, setEsCritico] = useState(false);
   const [finalizado, setFinalizado] = useState(false);
 
-  
-  const id = subasta.id || subasta.Id;
   const titulo = subasta.titulo || subasta.Titulo || "Sin título";
   const uriImagen = subasta.uriImagen || subasta.UriImagen || "https://via.placeholder.com/300x180?text=SubastaYa";
   const estadoRaw = subasta.estado !== undefined && subasta.estado !== null ? subasta.estado : (subasta.Estado || "ACTIVA");
@@ -30,11 +28,6 @@ const TarjetaSubastaCard = ({ subasta, alSeleccionarSubasta }) => {
     const fin = new Date(fechaStr.endsWith('Z') ? fechaStr : `${fechaStr}Z`).getTime();
     const ahora = new Date().getTime();
     const diferencia = fin - ahora;
-      
-    /*if (!fechaFin) return;
-      const ahora = new Date().getTime();
-      const fin = new Date(fechaFin).getTime();
-      const diferencia = fin - ahora;*/
 
       if (diferencia <= 0) {
         setTiempoRestante("00:00");
@@ -200,10 +193,6 @@ const fechaInicio = parseUTC(subasta.fechaInicio || subasta.FechaInicio || subas
 const fechaFin = parseUTC(subasta.fechaFin || subasta.FechaFin);
 const ahora = new Date().getTime();
 
-     /* const fechaInicio = new Date(subasta.fechaInicio || subasta.FechaInicio || subasta.fecha_inicio).getTime();
-      const fechaFin = new Date(subasta.fechaFin || subasta.FechaFin).getTime();
-      const ahora = new Date().getTime();*/
-
       const coincideTexto =
         !busquedaTexto ||
         titulo.includes(busquedaTexto.toLowerCase()) ||
@@ -254,62 +243,6 @@ const ahora = new Date().getTime();
       }
       return 0;
     })
-
-    /* .sort((a, b) => {
-      if (ordenamiento === "TIEMPO_MENOR") {
-        const finA = new Date(a.fechaFin || a.FechaFin).getTime();
-        const finB = new Date(b.fechaFin || b.FechaFin).getTime();
-        return finA - finB;
-      }
-      if (ordenamiento === "PUJA_MAYOR") {
-        const pujasA = a.pujas || a.Pujas || [];
-        const pujasB = b.pujas || b.Pujas || [];
-        const maxA = pujasA.length > 0 ? Math.max(...pujasA.map((p) => Number(p.monto || p.Monto))) : Number(a.precioBase || a.PrecioBase || 0);
-        const maxB = pujasB.length > 0 ? Math.max(...pujasB.map((p) => Number(p.monto || p.Monto))) : Number(b.precioBase || b.PrecioBase || 0);
-        return maxB - maxA;
-      }
-      return 0;
-    }); */
-
-  /*const subastasFiltradas = subastas
-    .filter((subasta) => {
-      const titulo = (subasta.titulo || subasta.Titulo || "").toLowerCase();
-      const descripcion = (subasta.descripcion || subasta.Descripcion || "").toLowerCase();
-      const estado = (subasta.estado !== undefined && subasta.estado !== null ? subasta.estado : subasta.Estado || "").toString().toUpperCase();
-      const categoriaId = Number(subasta.categoriaId || subasta.CategoriaId);
-
-      const coincideTexto =
-        !busquedaTexto ||
-        titulo.includes(busquedaTexto.toLowerCase()) ||
-        descripcion.includes(busquedaTexto.toLowerCase());
-
-      const coincideEstado =
-        filtroEstado === "TODOS" ||
-        estado === filtroEstado ||
-        (filtroEstado === "ACTIVA" && (estado === "ACTIVA" || estado === "ACTIVO" || estado === "1")) ||
-        (filtroEstado === "PROGRAMADA" && (estado === "PROGRAMADA" || estado === "PROXIMA" || estado === "0")) ||
-        (filtroEstado === "FINALIZADA" && (estado === "FINALIZADA" || estado === "DESIERTA" || estado === "2"));
-
-      const coincideCategoria =
-        filtroCategoria === "TODAS" || categoriaId === Number(filtroCategoria);
-
-      return coincideTexto && coincideEstado && coincideCategoria;
-    })
-    .sort((a, b) => {
-      if (ordenamiento === "TIEMPO_MENOR") {
-        const finA = new Date(a.fechaFin || a.FechaFin).getTime();
-        const finB = new Date(b.fechaFin || b.FechaFin).getTime();
-        return finA - finB;
-      }
-      if (ordenamiento === "PUJA_MAYOR") {
-        const pujasA = a.pujas || a.Pujas || [];
-        const pujasB = b.pujas || b.Pujas || [];
-        const maxA = pujasA.length > 0 ? Math.max(...pujasA.map((p) => p.monto || p.Monto)) : (a.precioBase || a.PrecioBase);
-        const maxB = pujasB.length > 0 ? Math.max(...pujasB.map((p) => p.monto || p.Monto)) : (b.precioBase || b.PrecioBase);
-        return maxB - maxA;
-      }
-      return 0;
-    });*/
 
   return (
     <div data-sys-render="auto" className="catalogo-container" style={{ padding: "10px" }}>
